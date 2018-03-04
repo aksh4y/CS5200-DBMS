@@ -24,35 +24,27 @@ public class UserDao {
 	}
 	
 	public int createUser(User user) throws SQLException, ClassNotFoundException {
-		String sql;
-		if(user.getId() != -1)	// id specified
-			sql = "INSERT INTO Person (id, firstName, lastName, username, password, email, dob) VALUES (?,?,?,?,?,?,?)";
-		else	// AI ID
-			sql = "INSERT INTO Person (firstName, lastName, username, password, email, dob) VALUES (?,?,?,?,?,?)";
+		String sql = "INSERT INTO Person (id, firstName, lastName, username, password, email, dob) VALUES (?,?,?,?,?,?,?)";
 		Connection conn = cfg.getConnection();
 		
 		PreparedStatement stmt = conn.prepareStatement(sql);
-		int i = 0;
-		if(user.getId() != -1)
-			stmt.setInt(++i, user.getId());
-		stmt.setString(++i, user.getFirstName());
-		stmt.setString(++i, user.getLastName());
-		stmt.setString(++i, user.getUsername());
-		stmt.setString(++i, user.getPassword());
-		stmt.setString(++i, user.getEmail());
-		stmt.setDate(++i, user.getDob());
+		stmt.setInt(1, user.getId());
+		stmt.setString(2, user.getFirstName());
+		stmt.setString(3, user.getLastName());
+		stmt.setString(4, user.getUsername());
+		stmt.setString(5, user.getPassword());
+		stmt.setString(6, user.getEmail());
+		stmt.setDate(7, user.getDob());
 		
 		int result = stmt.executeUpdate();
 		
 		if(result == 0)
 			throw new SQLException("SQL error occurred");
 		
-		// Useful when developer object has no pre-assigned ID
-		int id = findUserByCredentials(user.getUsername(), user.getPassword()).getId();
 		
 		sql = "INSERT INTO User (personID, userAgreement) VALUES(?,?)";
 		stmt = conn.prepareStatement(sql);
-		stmt.setInt(1, id);
+		stmt.setInt(1, user.getId());
 		stmt.setBoolean(2, user.isUserAgreement());
 		
 		result = stmt.executeUpdate();

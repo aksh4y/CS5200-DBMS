@@ -1,5 +1,7 @@
 package edu.northeastern.cs5200;
 
+import java.sql.SQLException;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -17,6 +19,16 @@ public class Cs5200Spring2018SadaranganiApplication extends SpringBootServletIni
 	public static void main(String[] args) {
 		SpringApplication.run(Cs5200Spring2018SadaranganiApplication.class, args);
 		ExecutableCommands exec = new ExecutableCommands();
-		exec.execute();			
+		try {
+			exec.execute();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	finally {
+			System.out.println("All commands have been successfully executed");
+		}
 	}
 }
