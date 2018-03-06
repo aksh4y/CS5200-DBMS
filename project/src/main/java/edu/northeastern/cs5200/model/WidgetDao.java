@@ -235,4 +235,25 @@ public class WidgetDao {
 		return result;
 		
 	}
+
+	/*public int reorderWidget(int widgetId, int sourceIndex, int finalIndex) {
+		
+		String sql = "SELECT pageID FROM Widget WHERE id=?";
+		Connection conn = cfg.getConnection();
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setInt(1, widgetId);
+		ResultSet res = stmt.executeQuery();
+		int pageId;
+		if (res.next())
+			pageId = res.getInt("pageID");
+		else
+			throw new SQLException("Error");
+		sql = "SELECT * FROM Widget WHERE pageID=?";
+		stmt = conn.prepareStatement(sql);
+		res = stmt.executeQuery();
+		
+		
+		
+		page[0].widgets.splice(end, 0, page[0].widgets.splice(start, 1)[0]);
+	}*/
 }

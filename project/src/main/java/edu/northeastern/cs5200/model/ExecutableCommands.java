@@ -5,6 +5,8 @@ import java.sql.SQLException;
 public class ExecutableCommands {
 		
 	public void execute() throws ClassNotFoundException, SQLException {
+		
+		// Creates 
 		Developer d1 = new Developer(1, "Alice", "Wonder", "alice", "wonder", "alice@wonder", null, "4321rewq");
 		Developer d2 = new Developer(2, "Bob", "Marley", "bob", "bob", "bob@marley", null, "5432trew");
 		Developer d3 = new Developer(3, "Charles", "Garcia", "charlie", "charlie", "chuch@garcia", null, "6543ytre");
@@ -103,7 +105,9 @@ public class ExecutableCommands {
 		wd.createWidgetForPage(wd4.getPageId(), wd4);
 		wd.createWidgetForPage(wd5.getPageId(), wd5);
 		wd.createWidgetForPage(wd6.getPageId(), wd6);
-	
+		
+		// Updates
+		
 	}
 
 }
