@@ -132,4 +132,16 @@ public class PageDao {
 		return result;
 		
 	}
+	
+	public int deleteLastUpdatedPageForWebsite(int websiteID) throws ClassNotFoundException, SQLException {
+		String sql = "DELETE FROM Page WHERE websiteID = ? AND updated = (SELECT * FROM (SELECT MAX(updated) FROM Page WHERE websiteID = ?) AS Q)";
+		Connection conn = cfg.getConnection();
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setInt(1, websiteID);
+		stmt.setInt(2, websiteID);
+		int result = stmt.executeUpdate();
+		stmt.close();
+		conn.close();
+		return result;
+	}
 }

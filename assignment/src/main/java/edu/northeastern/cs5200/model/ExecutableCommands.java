@@ -1,5 +1,7 @@
 package edu.northeastern.cs5200.model;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class ExecutableCommands {
@@ -20,11 +22,11 @@ public class ExecutableCommands {
 		dev.createDeveloper(d1);
 		dev.createDeveloper(d2);
 		dev.createDeveloper(d3);
-		System.out.println("Developers created successfully...");
+		System.out.println("(1/9) Developers created successfully...");
 		
 		user.createUser(u1);
 		user.createUser(u2);
-		System.out.println("Users created successfully...");
+		System.out.println("(2/9) Users created successfully...");
 		
 		Website w1 = new Website(1, d1.getId(), "Facebook", "an online social media and social networking service", 1234234);
 		Website w2 = new Website(2, d2.getId(), "Twitter", "an online news and social networking service", 4321543);
@@ -41,7 +43,7 @@ public class ExecutableCommands {
 		w.createWebsiteForDeveloper(w4.getDeveloperId(), w4);
 		w.createWebsiteForDeveloper(w5.getDeveloperId(), w5);
 		w.createWebsiteForDeveloper(w6.getDeveloperId(), w6);
-		System.out.println("Websites for Developers created successfully...");
+		System.out.println("(3/9) Websites for Developers created successfully...");
 		
 		RoleDao rd = RoleDao.getInstance();
 		
@@ -62,7 +64,7 @@ public class ExecutableCommands {
 		
 		rd.assignWebsiteRole(d1.getId(), w6.getId(), Role.editor);
 		rd.assignWebsiteRole(d2.getId(), w6.getId(), Role.admin);
-		System.out.println("Website roles assigned successfully...");
+		System.out.println("(4/9) Website roles assigned successfully...");
 		
 		Page p1 = new Page(1, w5.getId(), "Home", "Landing page", 123434);
 		Page p2 = new Page(2, w6.getId(), "About", "Website description", 234545);
@@ -76,7 +78,7 @@ public class ExecutableCommands {
 		p.createPageForWebsite(p3.getWebsiteId(), p3);
 		p.createPageForWebsite(p4.getWebsiteId(), p4);
 		p.createPageForWebsite(p5.getWebsiteId(), p5);
-		System.out.println("Pages for Websites created successfully...");
+		System.out.println("(5/9) Pages for Websites created successfully...");
 		
 		rd.assignPageRole(d1.getId(), p1.getId(), Role.editor);
 		rd.assignPageRole(d2.getId(), p1.getId(), Role.reviewer);
@@ -97,7 +99,7 @@ public class ExecutableCommands {
 		rd.assignPageRole(d2.getId(), p5.getId(), Role.editor);
 		rd.assignPageRole(d3.getId(), p5.getId(), Role.reviewer);
 		rd.assignPageRole(d1.getId(), p5.getId(), Role.writer);
-		System.out.println("Page roles assigned successfully...");
+		System.out.println("(6/9) Page roles assigned successfully...");
 		
 		HeadingWidget wd1 = new HeadingWidget(1, p1.getId(), "head123", 0, 0, null, null, "Welcome", 0, WidgetType.Heading, 0);
 		HtmlWidget wd2 = new HtmlWidget(2, p2.getId(), "post234", 0, 0, null, null, null, 0, WidgetType.Html, "<p>Lorem</p>");
@@ -113,10 +115,32 @@ public class ExecutableCommands {
 		wd.createWidgetForPage(wd4.getPageId(), wd4);
 		wd.createWidgetForPage(wd5.getPageId(), wd5);
 		wd.createWidgetForPage(wd6.getPageId(), wd6);
-		System.out.println("Widgets for Pages created successfully...");
+		System.out.println("(7/9) Widgets for Pages created successfully...");
 		
 		// Updates
+		wd.reorderWidget(wd3, wd3.getOrder(), 1);
+		appendCNET(w5.getId());
+		rd.swapPageRoles(d3, d2, p1);
+		System.out.println("(8/9) Updates were successful...");
 		
+		//Deletes
+		wd.removeLastWidgetForPage(p3.getId());
+		p.deleteLastUpdatedPageForWebsite(w3.getId());
+		w.deleteWebsite(w5.getId());
+		System.out.println("(9/9) Deletes were successful...");
+	}
+	
+	public int appendCNET(int websiteID) throws ClassNotFoundException, SQLException {
+		DbConfig cfg = new DbConfig();
+		int res = 0;
+		String sql = "UPDATE Page SET title = concat(\"CNET - \", title) WHERE websiteID = ?";
+		Connection conn = cfg.getConnection();
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setInt(1, websiteID);
+		res = stmt.executeUpdate();
+		stmt.close();
+		conn.close();
+		return res;
 	}
 
 }

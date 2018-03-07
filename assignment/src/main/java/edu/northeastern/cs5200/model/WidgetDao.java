@@ -236,24 +236,51 @@ public class WidgetDao {
 		
 	}
 
-	/*public int reorderWidget(int widgetId, int sourceIndex, int finalIndex) {
-		
-		String sql = "SELECT pageID FROM Widget WHERE id=?";
+	public int reorderWidget(Widget widget, int sourceIndex, int finalIndex) throws ClassNotFoundException, SQLException {
+		String sql;
+		int result;
+		sql = "UPDATE Widget SET `order` = ? WHERE id = ?";
 		Connection conn = cfg.getConnection();
 		PreparedStatement stmt = conn.prepareStatement(sql);
-		stmt.setInt(1, widgetId);
-		ResultSet res = stmt.executeQuery();
-		int pageId;
-		if (res.next())
-			pageId = res.getInt("pageID");
-		else
-			throw new SQLException("Error");
-		sql = "SELECT * FROM Widget WHERE pageID=?";
+		stmt.setInt(1, finalIndex);
+		stmt.setInt(2, widget.getId());
+		result = stmt.executeUpdate();
+		if(result == 0)
+			throw new SQLException("Could not update order of Widget");
+		
+		if(sourceIndex > finalIndex)	// Order moved up
+			sql = "UPDATE Widget SET `order` = `order` + 1 WHERE pageID = ? AND `order` between ? AND ? AND id <> ?";
+		else if(sourceIndex < finalIndex)		// Order moved down
+			sql = "UPDATE Widget SET `order` = `order` - 1 WHERE pageID = ? AND `order` between ? AND ? AND id <> ?";
+		else	// Order remains intact
+			return result = 1;
+		
 		stmt = conn.prepareStatement(sql);
-		res = stmt.executeQuery();
-		
-		
-		
-		page[0].widgets.splice(end, 0, page[0].widgets.splice(start, 1)[0]);
-	}*/
+		stmt.setInt(1, widget.getPageId());
+		if(sourceIndex > finalIndex) {
+			stmt.setInt(2, finalIndex);
+			stmt.setInt(3, sourceIndex);
+		}
+		else {
+			stmt.setInt(2, sourceIndex);
+			stmt.setInt(3, finalIndex);
+		}
+		stmt.setInt(4, widget.getId());
+		result = stmt.executeUpdate();
+		stmt.close();
+		conn.close();
+		return result;
+	}
+	
+	public int removeLastWidgetForPage(int pageID) throws SQLException, ClassNotFoundException {
+		String sql = "DELETE FROM Widget WHERE pageID = ? AND `order` = (SELECT * FROM (SELECT MAX(`order`) FROM Widget WHERE pageID = ?) AS Q)";
+		Connection conn = cfg.getConnection();
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setInt(1, pageID);
+		stmt.setInt(2, pageID);
+		int res = stmt.executeUpdate();
+		stmt.close();
+		conn.close();
+		return res;
+	}
 }

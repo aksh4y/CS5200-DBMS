@@ -69,4 +69,21 @@ public class RoleDao {
 		conn.close();
 		return res;
 	}	
+	
+	public int swapPageRoles(Developer dev1, Developer dev2, Page page) throws ClassNotFoundException, SQLException {
+		int res = 0;
+		String sql = "UPDATE PageRole a INNER JOIN PageRole b on a.developerID <> b.developerID SET a.role = b.role WHERE a.developerID in (?,?) AND b.developerID in (?,?) AND a.pageID = ? AND b.pageID= ?";
+		Connection conn = cfg.getConnection();
+		PreparedStatement statement = conn.prepareStatement(sql);
+		statement.setInt(1, dev1.getId());
+		statement.setInt(2, dev2.getId());
+		statement.setInt(3, dev1.getId());
+		statement.setInt(4, dev2.getId());
+		statement.setInt(5, page.getId());
+		statement.setInt(6, page.getId());
+		res = statement.executeUpdate();
+		statement.close();
+		conn.close();
+		return res;
+	}
 }
