@@ -18,7 +18,7 @@ public class Cs5200Spring2018SadaranganiApplication extends SpringBootServletIni
 	 }
 	public static void main(String[] args) {
 		SpringApplication.run(Cs5200Spring2018SadaranganiApplication.class, args);
-		ExecutableCommands exec = new ExecutableCommands();
+		/*ExecutableCommands exec = new ExecutableCommands();
 		try {
 			exec.execute();
 		} catch (ClassNotFoundException e) {
@@ -29,6 +29,6 @@ public class Cs5200Spring2018SadaranganiApplication extends SpringBootServletIni
 			e.printStackTrace();
 		}	finally {
 			System.out.println("All commands have been successfully executed");
-		}
+		}*/
 	}
 }
