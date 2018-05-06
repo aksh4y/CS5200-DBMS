@@ -1,0 +1,40 @@
+<?xml version = "1.0" encoding="UTF-8"?>
+<web-app xmlns:xsl="http://www.w3.org/2001/XMLSchema-instance">
+	<display-name>CS5200</display-name>
+	<welcome-file-list>
+		<welcome-file>index.html></welcome-file>
+		<welcome-file>index.htm></welcome-file>
+		<welcome-file>index.jsp></welcome-file>
+		<welcome-file>default.html></welcome-file>
+		<welcome-file>default.htm></welcome-file>
+		<welcome-file>default.jsp></welcome-file>
+	</welcome-file-list>
+	<resource-ref>
+		<description>My Datasource</description>
+		<res-ref-name>jdbc/movie-manager</res-ref-name>
+		<res-tyoe>javax.sql.DataSource</res-tyoe>
+		<res-auth>Container</res-auth>
+	</resource-ref>
+	<servlet>
+		<servlet-name>jersey-servlet</servlet-name>
+		
+		<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+		<init-param>
+			<param-name>com.sun.jersey.config.property.packages</param-name>
+			<param-value>edu.northeastern.cs5200.web.services.jaxrs, edu.northeastern.cs5200.orm.jpa.entities, edu.northeastern.cs5200.orm.jpa.daos</param-value>
+		</init-param>
+		<init-param>
+			<param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
+			<param-value>true</param-value>
+		</init-param>
+
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>jersey-servlet</servlet-name>
+		<url-pattern>/api/*</url-pattern>
+	</servlet-mapping>
+
+
+</web-app>
