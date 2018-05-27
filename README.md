@@ -10,3 +10,4 @@
 
 [Retrieve all hello messages](http://cs5200-spring2018-sadarangani.us-west-2.elasticbeanstalk.com/api/hello/select/all)
 
+> _Links will not work once AWS Free Tier is exhausted_
